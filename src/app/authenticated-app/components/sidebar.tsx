@@ -8,11 +8,12 @@ import {
   MenuButton,
   MenuItem,
   MenuList,
-  useColorModeValue as mode,
+  MenuDivider,
   Avatar,
+  useColorModeValue as mode,
 } from '@chakra-ui/react'
 import {useMatch, Link, NavLink} from 'react-router-dom'
-import {LogOut as LogOutIcon, Settings as SettingsIcon, LayoutGrid as LayoutGridIcon} from 'lucide-react'
+import {LogOut as LogOutIcon, User as UserIcon, LayoutGrid as LayoutGridIcon} from 'lucide-react'
 import {useAuth} from 'context/auth-context/auth-context'
 
 type SidebarItem = {
@@ -26,11 +27,6 @@ const sidebarItems: SidebarItem[] = [
     label: 'Cheats',
     icon: <LayoutGridIcon />,
     to: '/',
-  },
-  {
-    label: 'Settings',
-    icon: <SettingsIcon />,
-    to: '/settings',
   },
 ]
 
@@ -85,6 +81,10 @@ function UserMenu() {
         {user?.username}
       </MenuButton>
       <MenuList>
+        <MenuItem as={Link} to="/profile" icon={<UserIcon />}>
+          Profile
+        </MenuItem>
+        <MenuDivider />
         <MenuItem icon={<LogOutIcon />} onClick={logout}>
           Logout
         </MenuItem>

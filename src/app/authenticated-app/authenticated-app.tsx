@@ -4,14 +4,14 @@ import {Routes, Route} from 'react-router-dom'
 import {FullPageErrorFallback} from 'components/full-page-error-fallback/full-page-error-fallback'
 import {Sidebar} from 'app/authenticated-app/components/sidebar'
 import {NotFoundScreen} from 'screens/not-found'
-import {SettingsScreen} from 'screens/settings'
+import {ProfileScreen} from 'screens/profile'
 import {HomeScreen} from 'screens/home'
 
 function AppRoutes() {
   return (
     <Routes>
       <Route path="/" element={<HomeScreen />} />
-      <Route path="/settings" element={<SettingsScreen />} />
+      <Route path="/profile" element={<ProfileScreen />} />
       <Route path="*" element={<NotFoundScreen />} />
     </Routes>
   )
