@@ -1,7 +1,7 @@
 import {ColorModeSwitcher} from 'components/color-mode-switcher/color-mode-switcher'
 
-function SettingsScreen() {
+function ProfileScreen() {
   return <ColorModeSwitcher />
 }
 
-export {SettingsScreen}
+export {ProfileScreen}
