@@ -34,6 +34,7 @@ const PasswordField = React.forwardRef<HTMLInputElement, InputProps>((props, ref
     <FormControl id="password">
       <FormLabel>Password</FormLabel>
       <InputGroup>
+        <Input ref={mergeRef} type={isOpen ? 'text' : 'password'} autoComplete="current-password" required {...props} />
         <InputRightElement>
           <IconButton
             bg="transparent !important"
@@ -43,7 +44,6 @@ const PasswordField = React.forwardRef<HTMLInputElement, InputProps>((props, ref
             onClick={onClickReveal}
           />
         </InputRightElement>
-        <Input ref={mergeRef} type={isOpen ? 'text' : 'password'} autoComplete="current-password" required {...props} />
       </InputGroup>
     </FormControl>
   )
