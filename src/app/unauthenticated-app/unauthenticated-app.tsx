@@ -1,8 +1,8 @@
 import {Button, Heading, VStack, HStack, Icon, Box} from '@chakra-ui/react'
 import {LogIn as LogInIcon, UserPlus as UserPlusIcon} from 'lucide-react'
 import {Modal, ModalContents, ModalOpenButton} from 'components/modal/modal'
-import {LoginForm} from 'app/unauthenticated-app/components/forms/login-form'
-import {RegisterForm} from 'app/unauthenticated-app/components/forms/register-form'
+import {SignInForm} from 'app/unauthenticated-app/components/forms/sign-in-form'
+import {SignUpForm} from 'app/unauthenticated-app/components/forms/sign-up-form'
 
 function UnauthenticatedApp() {
   return (
@@ -17,11 +17,11 @@ function UnauthenticatedApp() {
         <Modal>
           <ModalOpenButton>
             <Button colorScheme="blue" leftIcon={<Icon as={LogInIcon} />} w={32}>
-              Login
+              Sign In
             </Button>
           </ModalOpenButton>
           <ModalContents aria-label="Login form" title="Login" isCentered>
-            <LoginForm />
+            <SignInForm />
           </ModalContents>
         </Modal>
         <Modal>
@@ -31,7 +31,7 @@ function UnauthenticatedApp() {
             </Button>
           </ModalOpenButton>
           <ModalContents aria-label="Register form" title="Register" isCentered>
-            <RegisterForm />
+            <SignUpForm />
           </ModalContents>
         </Modal>
       </HStack>

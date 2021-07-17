@@ -1,6 +1,4 @@
-import {DefaultRequestBody, RequestParams, rest, RestRequest} from 'msw'
 import {match} from 'node-match-path'
-import * as usersDB from 'test/data/users'
 
 let sleep = () => {}
 if (process.env.CI) {
@@ -22,35 +20,7 @@ function ls(key: string, defaultVal: number) {
   return val && Number.isFinite(val) ? val : defaultVal
 }
 
-const apiUrl = process.env.REACT_APP_API_URL
-const authUrl = process.env.REACT_APP_AUTH_URL
-
-const handlers = [
-  rest.post<{username: string; password: string}>(`${authUrl}/login`, async (req, res, ctx) => {
-    const {username, password} = req.body
-    const user = await usersDB.authenticate({username, password})
-    return res(ctx.json({user}))
-  }),
-
-  rest.post<{username: string; password: string}>(`${authUrl}/register`, async (req, res, ctx) => {
-    const {username, password} = req.body
-    const userFields = {username, password}
-    await usersDB.create(userFields)
-    let user
-    try {
-      user = await usersDB.authenticate(userFields)
-    } catch (error) {
-      return res(ctx.status(400), ctx.json({status: 400, message: error.message}))
-    }
-    return res(ctx.json({user}))
-  }),
-
-  rest.get(`${apiUrl}/me`, async (req, res, ctx) => {
-    const user = await getUser(req)
-    const token = getToken(req)
-    return res(ctx.json({user: {...user, token}}))
-  }),
-].map((handler) => {
+const handlers = [].map((handler) => {
   // @ts-expect-error
   const originalResolver = handler.resolver
   // @ts-expect-error
@@ -95,29 +65,6 @@ function requestMatchesFailConfig(req: any) {
     window.localStorage.removeItem('__cheatsheep_request_fail_config__')
   }
   return false
-}
-
-function getToken(req: RestRequest<DefaultRequestBody, RequestParams>) {
-  return req.headers.get('Authorization')?.replace('Bearer ', '')
-}
-
-async function getUser(req: RestRequest<DefaultRequestBody, RequestParams>) {
-  const token = getToken(req)
-  if (!token) {
-    const error = new Error('A token must be provided')
-    ;(error as any).status = 401
-    throw error
-  }
-  let userId
-  try {
-    userId = atob(token)
-  } catch (e) {
-    const error = new Error('Invalid token. Please login again.')
-    ;(error as any).status = 401
-    throw error
-  }
-  const user = await usersDB.read(userId)
-  return user
 }
 
 export {handlers}

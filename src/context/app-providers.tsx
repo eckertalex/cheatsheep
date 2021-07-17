@@ -2,7 +2,7 @@ import React from 'react'
 import {ChakraProvider, theme} from '@chakra-ui/react'
 import {HelmetProvider} from 'react-helmet-async'
 import {BrowserRouter as Router} from 'react-router-dom'
-import {AuthProvider} from 'context/auth-context/auth-context'
+import {AuthProvider} from 'context/auth-provider'
 import {QueryClientProvider} from 'context/query-client'
 
 function AppProviders({children}: React.PropsWithChildren<{}>) {

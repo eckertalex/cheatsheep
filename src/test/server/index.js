@@ -15,9 +15,5 @@ if (process.env.NODE_ENV === 'development') {
   // deploy our mock service worker to production
   // so normally, this condition would just look like this:
 
-  // module.exports = ""
-
-  // but for us, since we're shipping the dev server to prod
-  // we'll do the same thing we did for development:
-  module.exports = require('test/server/dev-server')
+  module.exports = ''
 }

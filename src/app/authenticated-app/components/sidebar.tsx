@@ -14,7 +14,7 @@ import {
 } from '@chakra-ui/react'
 import {useMatch, Link, NavLink} from 'react-router-dom'
 import {LogOut as LogOutIcon, User as UserIcon, LayoutGrid as LayoutGridIcon} from 'lucide-react'
-import {useAuth} from 'context/auth-context/auth-context'
+import {useAuth} from 'context/auth-provider'
 
 type SidebarItem = {
   label: string
@@ -65,7 +65,7 @@ function NavItem(props: SidebarItem) {
 }
 
 function UserMenu() {
-  const {user, logout} = useAuth()
+  const {session, signOut} = useAuth()
 
   return (
     <Menu>
@@ -74,19 +74,19 @@ function UserMenu() {
         variant="ghost"
         justifyContent="start"
         fontWeight="semibold"
-        leftIcon={<Avatar size="sm" name={user?.username} />}
+        leftIcon={<Avatar size="sm" name={session?.user?.email} />}
         textAlign="left"
         isFullWidth
       >
-        {user?.username}
+        {session?.user?.email}
       </MenuButton>
       <MenuList>
         <MenuItem as={Link} to="/profile" icon={<UserIcon />}>
           Profile
         </MenuItem>
         <MenuDivider />
-        <MenuItem icon={<LogOutIcon />} onClick={logout}>
-          Logout
+        <MenuItem icon={<LogOutIcon />} onClick={signOut}>
+          Sign Out
         </MenuItem>
       </MenuList>
     </Menu>

@@ -1,13 +1,13 @@
 import React from 'react'
 import {Helmet} from 'react-helmet-async'
 import {Flex, Spinner} from '@chakra-ui/react'
-import {useAuth} from 'context/auth-context/auth-context'
+import {useAuth} from 'context/auth-provider'
 
 const AuthenicatedApp = React.lazy(() => import(/* webpackPrefetch: true */ 'app/authenticated-app/authenticated-app'))
 const UnauthenticatedApp = React.lazy(() => import('app/unauthenticated-app/unauthenticated-app'))
 
 function App() {
-  const {user} = useAuth()
+  const {session} = useAuth()
 
   return (
     <React.Suspense
@@ -23,7 +23,7 @@ function App() {
           content="Cheatsheep App written in React with Chakra-UI, react-router, and react-query"
         />
       </Helmet>
-      {user ? <AuthenicatedApp /> : <UnauthenticatedApp />}
+      {session ? <AuthenicatedApp /> : <UnauthenticatedApp />}
     </React.Suspense>
   )
 }
