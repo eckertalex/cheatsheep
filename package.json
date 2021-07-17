@@ -49,6 +49,7 @@
     "@emotion/react": "^11.0.0",
     "@emotion/styled": "^11.0.0",
     "@supabase/supabase-js": "^1.19.0",
+    "boring-avatars": "^1.5.8",
     "framer-motion": "^4.1.16",
     "history": "^5.0.0",
     "lucide-react": "^0.15.12",

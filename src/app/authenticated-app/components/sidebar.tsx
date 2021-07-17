@@ -9,9 +9,9 @@ import {
   MenuItem,
   MenuList,
   MenuDivider,
-  Avatar,
   useColorModeValue as mode,
 } from '@chakra-ui/react'
+import BoringAvatar from 'boring-avatars'
 import {useMatch, Link, NavLink} from 'react-router-dom'
 import {LogOut as LogOutIcon, User as UserIcon, LayoutGrid as LayoutGridIcon} from 'lucide-react'
 import {useAuth} from 'context/auth-provider'
@@ -74,7 +74,15 @@ function UserMenu() {
         variant="ghost"
         justifyContent="start"
         fontWeight="semibold"
-        leftIcon={<Avatar size="sm" name={session?.user?.email} />}
+        leftIcon={
+          <BoringAvatar
+            size={32}
+            name={session?.user?.email}
+            variant="pixel"
+            square={false}
+            colors={['#ee5caa', '#f1e37a', '#2bd9fc', '#fc1e60']}
+          />
+        }
         textAlign="left"
         isFullWidth
       >
@@ -124,7 +132,7 @@ function Sidebar() {
             🐑
           </Box>
           <Text fontWeight="medium" fontSize="xl">
-            Cheatsheep
+            Cheatshee
           </Text>
         </VStack>
       </Link>
