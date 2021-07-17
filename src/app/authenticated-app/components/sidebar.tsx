@@ -1,20 +1,33 @@
+import React from 'react'
 import {
   Text,
   Flex,
   Button,
+  IconButton,
   Box,
   VStack,
+  HStack,
   Menu,
   MenuButton,
   MenuItem,
   MenuList,
+  Divider,
   MenuDivider,
   useColorModeValue as mode,
+  Tooltip,
 } from '@chakra-ui/react'
 import BoringAvatar from 'boring-avatars'
 import {useMatch, Link, NavLink} from 'react-router-dom'
-import {LogOut as LogOutIcon, User as UserIcon, LayoutGrid as LayoutGridIcon} from 'lucide-react'
 import {useAuth} from 'context/auth-provider'
+import {
+  LogOut as LogOutIcon,
+  User as UserIcon,
+  LayoutGrid as LayoutGridIcon,
+  ChevronsLeft as ChevronsLeftIcon,
+  ChevronsRight as ChevronsRightIcon,
+} from 'lucide-react'
+
+const appVersion = process.env.REACT_APP_VERSION
 
 type SidebarItem = {
   label: string
@@ -64,30 +77,59 @@ function NavItem(props: SidebarItem) {
   )
 }
 
-function UserMenu() {
-  const {session, signOut} = useAuth()
+function MiniNavItem(props: SidebarItem) {
+  const {to, label, icon} = props
+  const match = useMatch(to)
 
   return (
-    <Menu>
-      <MenuButton
-        as={Button}
+    <Tooltip label={label} hasArrow placement="right">
+      <IconButton
+        as={NavLink}
+        to={to}
         variant="ghost"
-        justifyContent="start"
-        fontWeight="semibold"
-        leftIcon={
-          <BoringAvatar
-            size={32}
-            name={session?.user?.email}
-            variant="pixel"
-            square={false}
-            colors={['#ee5caa', '#f1e37a', '#2bd9fc', '#fc1e60']}
-          />
-        }
-        textAlign="left"
-        isFullWidth
-      >
-        {session?.user?.email}
-      </MenuButton>
+        aria-label={label}
+        icon={icon}
+        {...(match
+          ? {
+              backgroundColor: 'blue.500',
+              color: 'white',
+              _hover: {
+                backgroundColor: 'blue.500',
+              },
+              _active: {
+                backgroundColor: 'blue.500',
+              },
+              _focus: {
+                backgroundColor: 'blue.500',
+              },
+            }
+          : {})}
+      />
+    </Tooltip>
+  )
+}
+
+function UserAvatar({name = 'Cheatsheep'}: {name?: string}) {
+  return (
+    <BoringAvatar
+      size={32}
+      name={name}
+      variant="pixel"
+      square={false}
+      colors={['#ee5caa', '#f1e37a', '#2bd9fc', '#fc1e60']}
+    />
+  )
+}
+
+type UserMenuProps = {
+  button: React.ReactNode
+  signOut: () => void
+}
+
+function UserMenu({button, signOut}: UserMenuProps) {
+  return (
+    <Menu placement="right" isLazy>
+      {button}
       <MenuList>
         <MenuItem as={Link} to="/profile" icon={<UserIcon />}>
           Profile
@@ -101,18 +143,12 @@ function UserMenu() {
   )
 }
 
-function SidebarFooter() {
-  return (
-    <VStack alignItems="start" spacing={4} marginX={4}>
-      <UserMenu />
-      <Text color={mode('gray.300', 'gray.600')} alignSelf="center" fontSize="sm">
-        App Version v{process.env.REACT_APP_VERSION}
-      </Text>
-    </VStack>
-  )
-}
-
 function Sidebar() {
+  const {session, signOut} = useAuth()
+  const [isMiniMode, setMiniMode] = React.useState(false)
+
+  const sidebarToggleLabel = isMiniMode ? 'Expand' : 'Collapse'
+
   return (
     <Flex
       as="nav"
@@ -123,26 +159,71 @@ function Sidebar() {
       backgroundColor={mode('white', 'gray.900')}
       flexShrink={0}
       height="100vh"
-      paddingY={4}
-      width={64}
+      padding={4}
+      width={isMiniMode ? 16 : 64}
     >
-      <Link to="/">
-        <VStack justifyContent="center" alignItems="center">
-          <Box role="img" aria-label="Cheatsheep" fontSize="6xl">
-            🐑
-          </Box>
+      <HStack justifyContent={isMiniMode ? 'center' : 'start'} as={Link} to="/">
+        <Box role="img" aria-label="Cheatsheep" fontSize="2xl" marginLeft={isMiniMode ? undefined : 4}>
+          🐑
+        </Box>
+        {isMiniMode ? null : (
           <Text fontWeight="medium" fontSize="xl">
-            Cheatshee
+            Cheatsheep
           </Text>
+        )}
+      </HStack>
+      <Divider marginY={4} />
+      <Flex flexDirection="column" justifyContent="space-between" alignItems="center" height="full">
+        {sidebarItems.map((item) => (
+          <React.Fragment key={item.to}>
+            {isMiniMode ? <MiniNavItem {...item} /> : <NavItem key={item.to} {...item} />}
+          </React.Fragment>
+        ))}
+        <VStack alignItems="start" spacing={4}>
+          <Divider />
+          <UserMenu
+            button={
+              isMiniMode ? (
+                <Tooltip label="User menu" hasArrow placement="right">
+                  <MenuButton
+                    as={IconButton}
+                    variant="ghost"
+                    aria-label={session?.user?.email}
+                    icon={<UserAvatar name={session?.user?.email} />}
+                  />
+                </Tooltip>
+              ) : (
+                <MenuButton
+                  as={Button}
+                  variant="ghost"
+                  justifyContent="start"
+                  fontWeight="semibold"
+                  leftIcon={<UserAvatar name={session?.user?.email} />}
+                  textAlign="left"
+                  isFullWidth
+                >
+                  {session?.user?.email}
+                </MenuButton>
+              )
+            }
+            signOut={signOut}
+          />
+          <HStack justifyContent="space-between" w="full">
+            {isMiniMode ? null : (
+              <Text color={mode('gray.300', 'gray.600')} alignSelf="center" fontSize="sm">
+                {isMiniMode ? `v${appVersion}` : `App Version v${appVersion}`}
+              </Text>
+            )}
+            <Tooltip label={sidebarToggleLabel} hasArrow placement="right">
+              <IconButton
+                variant="solid"
+                icon={isMiniMode ? <ChevronsRightIcon /> : <ChevronsLeftIcon />}
+                aria-label={`${sidebarToggleLabel} sidebar`}
+                onClick={() => setMiniMode((s) => !s)}
+              />
+            </Tooltip>
+          </HStack>
         </VStack>
-      </Link>
-      <Flex flexDirection="column" justifyContent="space-between" height="full">
-        <VStack marginX={4} marginTop={4} spacing={4}>
-          {sidebarItems.map((item) => (
-            <NavItem key={item.to} {...item} />
-          ))}
-        </VStack>
-        <SidebarFooter />
       </Flex>
     </Flex>
   )
