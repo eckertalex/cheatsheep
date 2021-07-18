@@ -19,12 +19,13 @@ import {
 import BoringAvatar from 'boring-avatars'
 import {useMatch, Link, NavLink} from 'react-router-dom'
 import {useAuth} from 'context/auth-provider'
+import {useLocalStorageValue} from '@react-hookz/web'
 import {
   LogOut as LogOutIcon,
   User as UserIcon,
   LayoutGrid as LayoutGridIcon,
-  ChevronsLeft as ChevronsLeftIcon,
-  ChevronsRight as ChevronsRightIcon,
+  SidebarClose as SidebarCloseIcon,
+  SidebarOpen as SidebarOpenIcon,
 } from 'lucide-react'
 
 const appVersion = process.env.REACT_APP_VERSION
@@ -145,7 +146,7 @@ function UserMenu({button, signOut}: UserMenuProps) {
 
 function Sidebar() {
   const {session, signOut} = useAuth()
-  const [isMiniMode, setMiniMode] = React.useState(false)
+  const [isMiniMode, setMiniMode] = useLocalStorageValue('__cheatsheep_sidebar_mini_mode__', false)
 
   const sidebarToggleLabel = isMiniMode ? 'Expand' : 'Collapse'
 
@@ -179,7 +180,7 @@ function Sidebar() {
             {isMiniMode ? <MiniNavItem {...item} /> : <NavItem key={item.to} {...item} />}
           </React.Fragment>
         ))}
-        <VStack alignItems="start" spacing={4}>
+        <VStack alignItems={isMiniMode ? 'center' : 'start'} spacing={4} w="full">
           <Divider />
           <UserMenu
             button={
@@ -193,31 +194,32 @@ function Sidebar() {
                   />
                 </Tooltip>
               ) : (
-                <MenuButton
-                  as={Button}
-                  variant="ghost"
-                  justifyContent="start"
-                  fontWeight="semibold"
-                  leftIcon={<UserAvatar name={session?.user?.email} />}
-                  textAlign="left"
-                  isFullWidth
-                >
-                  {session?.user?.email}
-                </MenuButton>
+                <Tooltip label={session?.user?.email} hasArrow placement="right">
+                  <MenuButton
+                    as={Button}
+                    variant="ghost"
+                    justifyContent="start"
+                    leftIcon={<UserAvatar name={session?.user?.email} />}
+                    textAlign="left"
+                    isFullWidth
+                  >
+                    <Text isTruncated>{session?.user?.email}</Text>
+                  </MenuButton>
+                </Tooltip>
               )
             }
             signOut={signOut}
           />
-          <HStack justifyContent="space-between" w="full">
+          <HStack justifyContent={isMiniMode ? 'center' : 'space-between'} w="full">
             {isMiniMode ? null : (
-              <Text color={mode('gray.300', 'gray.600')} alignSelf="center" fontSize="sm">
+              <Text color={mode('gray.300', 'gray.600')} fontSize="sm">
                 {isMiniMode ? `v${appVersion}` : `App Version v${appVersion}`}
               </Text>
             )}
             <Tooltip label={sidebarToggleLabel} hasArrow placement="right">
               <IconButton
                 variant="solid"
-                icon={isMiniMode ? <ChevronsRightIcon /> : <ChevronsLeftIcon />}
+                icon={isMiniMode ? <SidebarOpenIcon /> : <SidebarCloseIcon />}
                 aria-label={`${sidebarToggleLabel} sidebar`}
                 onClick={() => setMiniMode((s) => !s)}
               />
