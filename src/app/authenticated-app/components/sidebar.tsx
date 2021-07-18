@@ -7,142 +7,19 @@ import {
   Box,
   VStack,
   HStack,
-  Menu,
   MenuButton,
-  MenuItem,
-  MenuList,
   Divider,
-  MenuDivider,
   useColorModeValue as mode,
   Tooltip,
 } from '@chakra-ui/react'
-import BoringAvatar from 'boring-avatars'
-import {useMatch, Link, NavLink} from 'react-router-dom'
+import {Link} from 'react-router-dom'
 import {useAuth} from 'context/auth-provider'
 import {useLocalStorageValue} from '@react-hookz/web'
-import {
-  LogOut as LogOutIcon,
-  User as UserIcon,
-  LayoutGrid as LayoutGridIcon,
-  SidebarClose as SidebarCloseIcon,
-  SidebarOpen as SidebarOpenIcon,
-} from 'lucide-react'
+import {SidebarClose as SidebarCloseIcon, SidebarOpen as SidebarOpenIcon} from 'lucide-react'
+import {UserMenu, UserAvatar} from 'app/authenticated-app/components/user-menu'
+import {navItems, NavItem, MiniNavItem} from 'app/authenticated-app/components/nav'
 
 const appVersion = process.env.REACT_APP_VERSION
-
-type SidebarItem = {
-  label: string
-  icon: JSX.Element
-  to: string
-}
-
-const sidebarItems: SidebarItem[] = [
-  {
-    label: 'Cheats',
-    icon: <LayoutGridIcon />,
-    to: '/',
-  },
-]
-
-function NavItem(props: SidebarItem) {
-  const {to, label, icon} = props
-  const match = useMatch(to)
-
-  return (
-    <Button
-      as={NavLink}
-      to={to}
-      isFullWidth
-      variant="ghost"
-      justifyContent="start"
-      fontWeight="medium"
-      leftIcon={icon}
-      {...(match
-        ? {
-            backgroundColor: 'blue.500',
-            color: 'white',
-            _hover: {
-              backgroundColor: 'blue.500',
-            },
-            _active: {
-              backgroundColor: 'blue.500',
-            },
-            _focus: {
-              backgroundColor: 'blue.500',
-            },
-          }
-        : {})}
-    >
-      {label}
-    </Button>
-  )
-}
-
-function MiniNavItem(props: SidebarItem) {
-  const {to, label, icon} = props
-  const match = useMatch(to)
-
-  return (
-    <Tooltip label={label} hasArrow placement="right">
-      <IconButton
-        as={NavLink}
-        to={to}
-        variant="ghost"
-        aria-label={label}
-        icon={icon}
-        {...(match
-          ? {
-              backgroundColor: 'blue.500',
-              color: 'white',
-              _hover: {
-                backgroundColor: 'blue.500',
-              },
-              _active: {
-                backgroundColor: 'blue.500',
-              },
-              _focus: {
-                backgroundColor: 'blue.500',
-              },
-            }
-          : {})}
-      />
-    </Tooltip>
-  )
-}
-
-function UserAvatar({name = 'Cheatsheep'}: {name?: string}) {
-  return (
-    <BoringAvatar
-      size={32}
-      name={name}
-      variant="pixel"
-      square={false}
-      colors={['#ee5caa', '#f1e37a', '#2bd9fc', '#fc1e60']}
-    />
-  )
-}
-
-type UserMenuProps = {
-  button: React.ReactNode
-  signOut: () => void
-}
-
-function UserMenu({button, signOut}: UserMenuProps) {
-  return (
-    <Menu placement="right" isLazy>
-      {button}
-      <MenuList>
-        <MenuItem as={Link} to="/profile" icon={<UserIcon />}>
-          Profile
-        </MenuItem>
-        <MenuDivider />
-        <MenuItem icon={<LogOutIcon />} onClick={signOut}>
-          Sign Out
-        </MenuItem>
-      </MenuList>
-    </Menu>
-  )
-}
 
 function Sidebar() {
   const {session, signOut} = useAuth()
@@ -175,11 +52,13 @@ function Sidebar() {
       </HStack>
       <Divider marginY={4} />
       <Flex flexDirection="column" justifyContent="space-between" alignItems="center" height="full">
-        {sidebarItems.map((item) => (
-          <React.Fragment key={item.to}>
-            {isMiniMode ? <MiniNavItem {...item} /> : <NavItem key={item.to} {...item} />}
-          </React.Fragment>
-        ))}
+        <VStack spacing={4} width="full">
+          {navItems.map((item) => (
+            <React.Fragment key={item.to}>
+              {isMiniMode ? <MiniNavItem {...item} /> : <NavItem {...item} />}
+            </React.Fragment>
+          ))}
+        </VStack>
         <VStack alignItems={isMiniMode ? 'center' : 'start'} spacing={4} w="full">
           <Divider />
           <UserMenu
