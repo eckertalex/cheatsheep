@@ -1,23 +1,23 @@
-import * as auth from 'context/auth-context/auth-provider'
+import {supabase} from 'context/auth-provider'
 
 const apiURL = process.env.REACT_APP_API_URL
 
 export type ClientRequest<RequestBody> = Omit<RequestInit, 'body'> & {
   data?: RequestBody
-  token?: string
+  access_token?: string
 }
 
 async function client<RequestBody, ResponseBody>(
   endpoint: string,
-  {data, token, headers: customHeaders, ...customConfig}: ClientRequest<RequestBody> = {}
+  {data, access_token, headers: customHeaders, ...customConfig}: ClientRequest<RequestBody> = {}
 ) {
   const config = {
     method: data ? 'POST' : 'GET',
     body: data ? JSON.stringify(data) : undefined,
     headers:
-      data && token
+      data && access_token
         ? {
-            Authorization: `Bearer ${token}`,
+            Authorization: `Bearer ${access_token}`,
             'Content-Type': 'application/json',
             ...customHeaders,
           }
@@ -26,9 +26,9 @@ async function client<RequestBody, ResponseBody>(
             'Content-Type': 'application/json',
             ...customHeaders,
           }
-        : token
+        : access_token
         ? {
-            Authorization: `Bearer ${token}`,
+            Authorization: `Bearer ${access_token}`,
             ...customHeaders,
           }
         : customHeaders,
@@ -37,7 +37,7 @@ async function client<RequestBody, ResponseBody>(
 
   return window.fetch(`${apiURL}/${endpoint}`, config).then(async (response) => {
     if (response.status === 401) {
-      await auth.logout()
+      await supabase.auth.signOut()
       // refresh the page for them
       window.location.assign(window.location.toString())
       return Promise.reject({message: 'Please re-authenticate.'})

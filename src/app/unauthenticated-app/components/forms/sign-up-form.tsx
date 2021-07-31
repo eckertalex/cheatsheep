@@ -1,16 +1,16 @@
 import React from 'react'
 import {FormControl, FormLabel, Input, Icon, VStack, Stack} from '@chakra-ui/react'
 import {useAsync} from 'utils/hooks'
-import {useAuth} from 'context/auth-context/auth-context'
+import {useAuth} from 'context/auth-provider'
 import {PasswordField} from 'components/password-field/password-field'
 import {UserPlus as UserPlusIcon, XOctagon as XOctagonIcon, CheckCircle as CheckCircleIcon} from 'lucide-react'
 import {LoadingButton} from 'components/loading-button/loading-button'
 import {ModalBody, ModalFooter} from 'components/modal/modal'
 
-function RegisterForm() {
-  const {register} = useAuth()
+function SignUpForm() {
+  const {signUp} = useAuth()
   const {status, error, run} = useAsync()
-  const [username, setUsername] = React.useState('')
+  const [email, setEmail] = React.useState('')
   const [password, setPassword] = React.useState('')
   const state =
     status === 'pending' ? 'loading' : status === 'resolved' ? 'success' : status === 'rejected' ? 'error' : 'idle'
@@ -19,8 +19,8 @@ function RegisterForm() {
     event.preventDefault()
 
     run(
-      register({
-        username,
+      signUp({
+        email,
         password,
       })
     )
@@ -31,13 +31,13 @@ function RegisterForm() {
       <Stack spacing="6">
         <ModalBody>
           <VStack spacing="2.5">
-            <FormControl id="username">
-              <FormLabel>Username</FormLabel>
+            <FormControl id="email">
+              <FormLabel>Email</FormLabel>
               <Input
                 required
-                value={username}
+                value={email}
                 onChange={(event) => {
-                  setUsername(event.target.value)
+                  setEmail(event.target.value)
                 }}
               />
             </FormControl>
@@ -52,16 +52,16 @@ function RegisterForm() {
         <ModalFooter>
           <LoadingButton
             state={state}
-            text="Register"
-            textLoading="Registering..."
+            text="Sign Up"
+            textLoading="Signing up..."
             textError={error?.message}
             colorScheme="blue"
             colorSchemeError="red"
             colorSchemeSuccess="green"
-            ariaText="Register to Cheatsheep"
-            ariaLoadingAlert="Registering"
-            ariaSuccessAlert="Successfully registered"
-            ariaErrorAlert={`Error registering: ${error?.message}`}
+            ariaText="Sign up to Cheatsheep"
+            ariaLoadingAlert="Signing up"
+            ariaSuccessAlert="Successfully signed up"
+            ariaErrorAlert={`Error signing up: ${error?.message}`}
             icon={<Icon as={UserPlusIcon} />}
             iconError={<Icon as={XOctagonIcon} />}
             iconSuccess={<Icon as={CheckCircleIcon} />}
@@ -73,4 +73,4 @@ function RegisterForm() {
   )
 }
 
-export {RegisterForm}
+export {SignUpForm}
