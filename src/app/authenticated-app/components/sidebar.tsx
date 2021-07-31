@@ -1,110 +1,32 @@
+import React from 'react'
 import {
   Text,
   Flex,
   Button,
+  IconButton,
   Box,
   VStack,
-  Menu,
+  HStack,
   MenuButton,
-  MenuItem,
-  MenuList,
-  MenuDivider,
-  Avatar,
+  Divider,
   useColorModeValue as mode,
+  Tooltip,
 } from '@chakra-ui/react'
-import {useMatch, Link, NavLink} from 'react-router-dom'
-import {LogOut as LogOutIcon, User as UserIcon, LayoutGrid as LayoutGridIcon} from 'lucide-react'
+import {Link} from 'react-router-dom'
 import {useAuth} from 'context/auth-provider'
+import {useLocalStorageValue} from '@react-hookz/web'
+import {SidebarClose as SidebarCloseIcon, SidebarOpen as SidebarOpenIcon} from 'lucide-react'
+import {UserMenu, UserAvatar} from 'app/authenticated-app/components/user-menu'
+import {navItems, NavItem, MiniNavItem} from 'app/authenticated-app/components/nav'
 
-type SidebarItem = {
-  label: string
-  icon: JSX.Element
-  to: string
-}
-
-const sidebarItems: SidebarItem[] = [
-  {
-    label: 'Cheats',
-    icon: <LayoutGridIcon />,
-    to: '/',
-  },
-]
-
-function NavItem(props: SidebarItem) {
-  const {to, label, icon} = props
-  const match = useMatch(to)
-
-  return (
-    <Button
-      as={NavLink}
-      to={to}
-      isFullWidth
-      variant="ghost"
-      justifyContent="start"
-      fontWeight="medium"
-      leftIcon={icon}
-      {...(match
-        ? {
-            backgroundColor: 'blue.500',
-            color: 'white',
-            _hover: {
-              backgroundColor: 'blue.500',
-            },
-            _active: {
-              backgroundColor: 'blue.500',
-            },
-            _focus: {
-              backgroundColor: 'blue.500',
-            },
-          }
-        : {})}
-    >
-      {label}
-    </Button>
-  )
-}
-
-function UserMenu() {
-  const {session, signOut} = useAuth()
-
-  return (
-    <Menu>
-      <MenuButton
-        as={Button}
-        variant="ghost"
-        justifyContent="start"
-        fontWeight="semibold"
-        leftIcon={<Avatar size="sm" name={session?.user?.email} />}
-        textAlign="left"
-        isFullWidth
-      >
-        {session?.user?.email}
-      </MenuButton>
-      <MenuList>
-        <MenuItem as={Link} to="/profile" icon={<UserIcon />}>
-          Profile
-        </MenuItem>
-        <MenuDivider />
-        <MenuItem icon={<LogOutIcon />} onClick={signOut}>
-          Sign Out
-        </MenuItem>
-      </MenuList>
-    </Menu>
-  )
-}
-
-function SidebarFooter() {
-  return (
-    <VStack alignItems="start" spacing={4} marginX={4}>
-      <UserMenu />
-      <Text color={mode('gray.300', 'gray.600')} alignSelf="center" fontSize="sm">
-        App Version v{process.env.REACT_APP_VERSION}
-      </Text>
-    </VStack>
-  )
-}
+const appVersion = process.env.REACT_APP_VERSION
 
 function Sidebar() {
+  const {session, signOut} = useAuth()
+  const [isMiniMode, setMiniMode] = useLocalStorageValue('__cheatsheep_sidebar_mini_mode__', false)
+
+  const sidebarToggleLabel = isMiniMode ? 'Expand' : 'Collapse'
+
   return (
     <Flex
       as="nav"
@@ -115,26 +37,74 @@ function Sidebar() {
       backgroundColor={mode('white', 'gray.900')}
       flexShrink={0}
       height="100vh"
-      paddingY={4}
-      width={64}
+      padding={4}
+      width={isMiniMode ? 16 : 64}
     >
-      <Link to="/">
-        <VStack justifyContent="center" alignItems="center">
-          <Box role="img" aria-label="Cheatsheep" fontSize="6xl">
-            🐑
-          </Box>
+      <HStack justifyContent={isMiniMode ? 'center' : 'start'} as={Link} to="/">
+        <Box role="img" aria-label="Cheatsheep" fontSize="2xl" marginLeft={isMiniMode ? undefined : 4}>
+          🐑
+        </Box>
+        {isMiniMode ? null : (
           <Text fontWeight="medium" fontSize="xl">
             Cheatsheep
           </Text>
-        </VStack>
-      </Link>
-      <Flex flexDirection="column" justifyContent="space-between" height="full">
-        <VStack marginX={4} marginTop={4} spacing={4}>
-          {sidebarItems.map((item) => (
-            <NavItem key={item.to} {...item} />
+        )}
+      </HStack>
+      <Divider marginY={4} />
+      <Flex flexDirection="column" justifyContent="space-between" alignItems="center" height="full">
+        <VStack spacing={4} width="full">
+          {navItems.map((item) => (
+            <React.Fragment key={item.to}>
+              {isMiniMode ? <MiniNavItem {...item} /> : <NavItem {...item} />}
+            </React.Fragment>
           ))}
         </VStack>
-        <SidebarFooter />
+        <VStack alignItems={isMiniMode ? 'center' : 'start'} spacing={4} w="full">
+          <Divider />
+          <UserMenu
+            button={
+              isMiniMode ? (
+                <Tooltip label="User menu" hasArrow placement="right">
+                  <MenuButton
+                    as={IconButton}
+                    variant="ghost"
+                    aria-label={session?.user?.email}
+                    icon={<UserAvatar name={session?.user?.email} />}
+                  />
+                </Tooltip>
+              ) : (
+                <Tooltip label={session?.user?.email} hasArrow placement="right">
+                  <MenuButton
+                    as={Button}
+                    variant="ghost"
+                    justifyContent="start"
+                    leftIcon={<UserAvatar name={session?.user?.email} />}
+                    textAlign="left"
+                    isFullWidth
+                  >
+                    <Text isTruncated>{session?.user?.email}</Text>
+                  </MenuButton>
+                </Tooltip>
+              )
+            }
+            signOut={signOut}
+          />
+          <HStack justifyContent={isMiniMode ? 'center' : 'space-between'} w="full">
+            {isMiniMode ? null : (
+              <Text color={mode('gray.300', 'gray.600')} fontSize="sm">
+                {isMiniMode ? `v${appVersion}` : `App Version v${appVersion}`}
+              </Text>
+            )}
+            <Tooltip label={sidebarToggleLabel} hasArrow placement="right">
+              <IconButton
+                variant="solid"
+                icon={isMiniMode ? <SidebarOpenIcon /> : <SidebarCloseIcon />}
+                aria-label={`${sidebarToggleLabel} sidebar`}
+                onClick={() => setMiniMode((s) => !s)}
+              />
+            </Tooltip>
+          </HStack>
+        </VStack>
       </Flex>
     </Flex>
   )
