@@ -7,6 +7,8 @@
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
+    "tauri:dev": "tauri dev",
+    "tauri:build": "tauri build",
     "preserve": "npm run build",
     "preanalyze": "npm run build",
     "analyze": "source-map-explorer 'build/static/js/*.js'",
@@ -48,8 +50,9 @@
     "@chakra-ui/react": "^1.0.0",
     "@emotion/react": "^11.0.0",
     "@emotion/styled": "^11.0.0",
-    "@supabase/supabase-js": "^1.19.0",
     "@react-hookz/web": "^4.0.0",
+    "@supabase/supabase-js": "^1.19.0",
+    "@tauri-apps/api": "^1.0.0-beta.5",
     "boring-avatars": "^1.5.8",
     "framer-motion": "^4.1.16",
     "history": "^5.0.0",
@@ -67,6 +70,7 @@
   "devDependencies": {
     "@commitlint/cli": "^12.1.4",
     "@commitlint/config-conventional": "^12.1.4",
+    "@tauri-apps/cli": "^1.0.0-beta.6",
     "@testing-library/jest-dom": "^5.9.0",
     "@testing-library/react": "^11.2.7",
     "@testing-library/react-hooks": "^5.1.2",
