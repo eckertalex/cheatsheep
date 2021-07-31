@@ -4,7 +4,6 @@ import {
   Flex,
   Button,
   IconButton,
-  Box,
   VStack,
   HStack,
   MenuButton,
@@ -18,6 +17,7 @@ import {useLocalStorageValue} from '@react-hookz/web'
 import {SidebarClose as SidebarCloseIcon, SidebarOpen as SidebarOpenIcon} from 'lucide-react'
 import {UserMenu, UserAvatar} from 'app/authenticated-app/components/user-menu'
 import {navItems, NavItem, MiniNavItem} from 'app/authenticated-app/components/nav'
+import {EweIcon} from 'app/ewe'
 
 const appVersion = process.env.REACT_APP_VERSION
 
@@ -30,8 +30,9 @@ function Sidebar() {
   return (
     <Flex
       as="nav"
+      position="sticky"
+      top="0"
       flexDirection="column"
-      overflowY="auto"
       borderRightWidth={1}
       borderRightColor={mode('gray.200', 'gray.700')}
       backgroundColor={mode('white', 'gray.900')}
@@ -41,9 +42,7 @@ function Sidebar() {
       width={isMiniMode ? 16 : 64}
     >
       <HStack justifyContent={isMiniMode ? 'center' : 'start'} as={Link} to="/">
-        <Box role="img" aria-label="Cheatsheep" fontSize="2xl" marginLeft={isMiniMode ? undefined : 4}>
-          🐑
-        </Box>
+        <EweIcon aria-label="Cheatsheep" boxSize="1.5rem" marginLeft={isMiniMode ? undefined : 4} />
         {isMiniMode ? null : (
           <Text fontWeight="medium" fontSize="xl">
             Cheatsheep

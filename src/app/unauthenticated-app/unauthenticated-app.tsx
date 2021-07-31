@@ -1,22 +1,21 @@
-import {Button, Heading, VStack, HStack, Icon, Box} from '@chakra-ui/react'
+import {Button, Heading, VStack, HStack, Icon} from '@chakra-ui/react'
 import {LogIn as LogInIcon, UserPlus as UserPlusIcon} from 'lucide-react'
 import {Modal, ModalContents, ModalOpenButton} from 'components/modal/modal'
 import {SignInForm} from 'app/unauthenticated-app/components/forms/sign-in-form'
 import {SignUpForm} from 'app/unauthenticated-app/components/forms/sign-up-form'
+import {EweIcon} from 'app/ewe'
 
 function UnauthenticatedApp() {
   return (
     <VStack alignItems="center" justifyContent="center" width="full" height="100vh">
-      <Box role="img" aria-label="Cheatsheep" fontSize="9xl">
-        🐑
-      </Box>
+      <EweIcon boxSize="8rem" />
       <Heading size="2xl" variant="h1">
         Cheatsheep
       </Heading>
       <HStack>
         <Modal>
           <ModalOpenButton>
-            <Button colorScheme="blue" leftIcon={<Icon as={LogInIcon} />} w={32}>
+            <Button colorScheme="pink" leftIcon={<Icon as={LogInIcon} />} w={32}>
               Sign In
             </Button>
           </ModalOpenButton>
@@ -26,7 +25,7 @@ function UnauthenticatedApp() {
         </Modal>
         <Modal>
           <ModalOpenButton>
-            <Button colorScheme="blue" variant="outline" leftIcon={<Icon as={UserPlusIcon} />} w={32}>
+            <Button colorScheme="pink" variant="outline" leftIcon={<Icon as={UserPlusIcon} />} w={32}>
               Register
             </Button>
           </ModalOpenButton>

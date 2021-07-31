@@ -1,4 +1,4 @@
-import {Box, Flex, useMediaQuery} from '@chakra-ui/react'
+import {Box, Flex, useMediaQuery, useColorModeValue as mode} from '@chakra-ui/react'
 import {ErrorBoundary} from 'react-error-boundary'
 import {Routes, Route} from 'react-router-dom'
 import {FullPageErrorFallback} from 'components/full-page-error-fallback/full-page-error-fallback'
@@ -25,7 +25,21 @@ function AuthenticatedApp() {
     <ErrorBoundary FallbackComponent={FullPageErrorFallback}>
       <Flex flexDirection={isLargerThan768 ? 'row' : 'column'}>
         {isLargerThan768 ? <Sidebar /> : <MobileNav />}
-        <Box marginY={4} width="full">
+        <Box
+          as="main"
+          marginY={4}
+          width="full"
+          // Full screen height - mobile nav (64px) - top margin (16px) - bottom margin (16px)
+          minHeight="calc(100vh - 96px)"
+          backgroundAttachment="fixed"
+          backgroundImage={mode(
+            'url(/assets/svgs/sheep-grazing-light.svg)',
+            'url(/assets/svgs/sheep-grazing-dark.svg)'
+          )}
+          backgroundRepeat="no-repeat"
+          backgroundPosition="80% 80%"
+          backgroundSize="50vw"
+        >
           <AppRoutes />
         </Box>
       </Flex>
