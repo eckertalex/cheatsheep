@@ -1,6 +1,5 @@
 import React from 'react'
 import {
-  Box,
   Button,
   Text,
   VStack,
@@ -24,6 +23,7 @@ import {Menu as MenuIcon} from 'lucide-react'
 import {UserMenu, UserAvatar} from 'app/authenticated-app/components/user-menu'
 import {useAuth} from 'context/auth-provider'
 import {navItems, NavItem} from 'app/authenticated-app/components/nav'
+import {EweIcon} from 'app/ewe'
 
 const appVersion = process.env.REACT_APP_VERSION
 
@@ -68,9 +68,7 @@ function MobileNav() {
           <DrawerCloseButton />
           <DrawerHeader>
             <HStack as={Link} to="/">
-              <Box role="img" aria-label="Cheatsheep" fontSize="2xl">
-                🐑
-              </Box>
+              <EweIcon aria-label="Cheatsheep" boxSize="1.5rem" />
               <Text fontWeight="medium" fontSize="xl">
                 Cheatsheep
               </Text>

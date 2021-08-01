@@ -55,7 +55,7 @@ function SignInForm() {
             text="Sign In"
             textLoading="Signing in..."
             textError={error?.message}
-            colorScheme="blue"
+            colorScheme="pink"
             colorSchemeError="red"
             colorSchemeSuccess="green"
             ariaText="Sign in to Cheatsheep"

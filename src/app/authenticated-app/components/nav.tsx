@@ -31,16 +31,16 @@ function NavItem(props: NavItemProps) {
       leftIcon={icon}
       {...(match
         ? {
-            backgroundColor: 'blue.500',
+            backgroundColor: 'pink.500',
             color: 'white',
             _hover: {
-              backgroundColor: 'blue.500',
+              backgroundColor: 'pink.500',
             },
             _active: {
-              backgroundColor: 'blue.500',
+              backgroundColor: 'pink.500',
             },
             _focus: {
-              backgroundColor: 'blue.500',
+              backgroundColor: 'pink.500',
             },
           }
         : {})}
@@ -64,16 +64,16 @@ function MiniNavItem(props: NavItemProps) {
         icon={icon}
         {...(match
           ? {
-              backgroundColor: 'blue.500',
+              backgroundColor: 'pink.500',
               color: 'white',
               _hover: {
-                backgroundColor: 'blue.500',
+                backgroundColor: 'pink.500',
               },
               _active: {
-                backgroundColor: 'blue.500',
+                backgroundColor: 'pink.500',
               },
               _focus: {
-                backgroundColor: 'blue.500',
+                backgroundColor: 'pink.500',
               },
             }
           : {})}
