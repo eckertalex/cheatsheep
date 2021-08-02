@@ -56,7 +56,7 @@ function MobileNav() {
               rightIcon={<UserAvatar name={session?.user?.email} />}
               textAlign="right"
             >
-              <Text isTruncated>eckertalex@pm.me</Text>
+              <Text isTruncated>{session?.user?.email}</Text>
             </MenuButton>
           </Tooltip>
         }
