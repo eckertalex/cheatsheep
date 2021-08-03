@@ -17,6 +17,7 @@ type AuthProviderValue = {
   signIn: (user: User) => Promise<void>
   signOut: () => void
   changePassword: (newPassword: string) => Promise<void>
+  deleteAccount: () => Promise<void>
 }
 
 const supabaseUrl = process.env.REACT_APP_SUPABASE_URL ?? ''
@@ -102,9 +103,19 @@ function AuthProvider({children}: {children: React.ReactNode}) {
     [data, setData]
   )
 
+  const deleteAccount = React.useCallback(async () => {
+    const {error} = await supabase.rpc('delete_user')
+    if (error) {
+      throw error
+    } else {
+      queryClient.clear()
+      setData(null)
+    }
+  }, [queryClient, setData])
+
   const value = React.useMemo<AuthProviderValue>(() => {
-    return {session: data, signIn, signOut, signUp, changePassword}
-  }, [changePassword, data, signIn, signOut, signUp])
+    return {session: data, signIn, signOut, signUp, changePassword, deleteAccount}
+  }, [changePassword, data, deleteAccount, signIn, signOut, signUp])
 
   if (isLoading || isIdle) {
     return (

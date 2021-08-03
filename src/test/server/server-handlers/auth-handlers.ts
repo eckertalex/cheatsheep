@@ -27,6 +27,11 @@ const authHandlers = [
 
     return res(ctx.status(originalResponse.status), ctx.json(originalResponseData))
   }),
+  rest.post(`${authUrl}/delete_user`, async (req, res, ctx) => {
+    const originalResponse = await ctx.fetch(req)
+
+    return res(ctx.status(originalResponse.status))
+  }),
 ]
 
 export {authHandlers}

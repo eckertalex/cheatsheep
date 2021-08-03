@@ -3,6 +3,7 @@ import {Card} from 'components/card/card'
 import {ColorModeSwitcher} from 'components/color-mode-switcher/color-mode-switcher'
 import {Page} from 'components/page/page'
 import {ChangePassword} from 'features/change-password/change-password'
+import {DeleteAccount} from 'features/delete-account/delete-account'
 
 function ProfileScreen() {
   const {colorMode} = useColorMode()
@@ -19,6 +20,7 @@ function ProfileScreen() {
             <ColorModeSwitcher />
           </Flex>
         </Card>
+        <DeleteAccount />
       </SimpleGrid>
     </Page>
   )

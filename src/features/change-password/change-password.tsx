@@ -45,7 +45,7 @@ function ChangePassword() {
             ariaText="Change password"
             ariaLoadingAlert="Changing password"
             ariaSuccessAlert="Successfully changed password"
-            ariaErrorAlert={`Error Changing password: ${error?.message}`}
+            ariaErrorAlert={`Error changing password: ${error?.message}`}
             icon={<Icon as={LockIcon} />}
             iconError={<Icon as={XOctagonIcon} />}
             iconSuccess={<Icon as={CheckCircleIcon} />}
