@@ -7,7 +7,7 @@ import {
   IconButton,
   MenuButton,
   Tooltip,
-  useColorModeValue as mode,
+  useColorModeValue,
   useDisclosure,
   Drawer,
   DrawerOverlay,
@@ -28,6 +28,8 @@ import {EweIcon} from 'app/ewe'
 const appVersion = process.env.REACT_APP_VERSION
 
 function MobileNav() {
+  const borderBottomColor = useColorModeValue('gray.200', 'gray.700')
+  const backgroundColor = useColorModeValue('white', 'gray.900')
   const {isOpen, onOpen, onClose} = useDisclosure()
   const {session, signOut} = useAuth()
   const btnRef = React.useRef<HTMLButtonElement>(null)
@@ -36,8 +38,8 @@ function MobileNav() {
     <Flex
       as="nav"
       borderBottomWidth={1}
-      borderBottomColor={mode('gray.200', 'gray.700')}
-      backgroundColor={mode('white', 'gray.900')}
+      borderBottomColor={borderBottomColor}
+      backgroundColor={backgroundColor}
       alignItems="center"
       justifyContent="space-between"
       padding={4}
@@ -80,7 +82,7 @@ function MobileNav() {
             ))}
           </DrawerBody>
           <DrawerFooter>
-            <Text color={mode('gray.300', 'gray.600')} fontSize="sm">
+            <Text color={borderBottomColor} fontSize="sm">
               App Version v{appVersion}
             </Text>
           </DrawerFooter>

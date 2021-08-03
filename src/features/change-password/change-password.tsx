@@ -5,21 +5,19 @@ import {Card} from 'components/card/card'
 import {PasswordField} from 'components/password-field/password-field'
 import {LoadingButton} from 'components/loading-button/loading-button'
 import {CheckCircle as CheckCircleIcon, Lock as LockIcon, XOctagon as XOctagonIcon} from 'lucide-react'
+import {useAuth} from 'context/auth-provider'
 
 function ChangePassword() {
+  const {changePassword} = useAuth()
   const {status, error, run} = useAsync()
   const [newPassword, setNewPassword] = React.useState('')
   const state =
     status === 'pending' ? 'loading' : status === 'resolved' ? 'success' : status === 'rejected' ? 'error' : 'idle'
 
-  async function mock() {
-    return Promise.resolve()
-  }
-
   function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault()
 
-    run(mock())
+    run(changePassword(newPassword))
   }
 
   return (

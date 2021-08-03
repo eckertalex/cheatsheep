@@ -8,7 +8,7 @@ import {
   HStack,
   MenuButton,
   Divider,
-  useColorModeValue as mode,
+  useColorModeValue,
   Tooltip,
 } from '@chakra-ui/react'
 import {Link} from 'react-router-dom'
@@ -23,6 +23,8 @@ const appVersion = process.env.REACT_APP_VERSION
 
 function Sidebar() {
   const {session, signOut} = useAuth()
+  const borderColorSidebar = useColorModeValue('gray.200', 'gray.700')
+  const bgColorSidebar = useColorModeValue('white', 'gray.900')
   const [isMiniMode, setMiniMode] = useLocalStorageValue('__cheatsheep_sidebar_mini_mode__', false)
 
   const sidebarToggleLabel = isMiniMode ? 'Expand' : 'Collapse'
@@ -34,8 +36,8 @@ function Sidebar() {
       top="0"
       flexDirection="column"
       borderRightWidth={1}
-      borderRightColor={mode('gray.200', 'gray.700')}
-      backgroundColor={mode('white', 'gray.900')}
+      borderRightColor={borderColorSidebar}
+      backgroundColor={bgColorSidebar}
       flexShrink={0}
       height="100vh"
       padding={4}
@@ -90,7 +92,7 @@ function Sidebar() {
           />
           <HStack justifyContent={isMiniMode ? 'center' : 'space-between'} w="full">
             {isMiniMode ? null : (
-              <Text color={mode('gray.300', 'gray.600')} fontSize="sm">
+              <Text color={borderColorSidebar} fontSize="sm">
                 App Version v{appVersion}
               </Text>
             )}

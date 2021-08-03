@@ -13,9 +13,10 @@ export type User = {
 
 type AuthProviderValue = {
   session: Session | null
+  signUp: (user: User) => Promise<void>
   signIn: (user: User) => Promise<void>
   signOut: () => void
-  signUp: (user: User) => Promise<void>
+  changePassword: (newPassword: string) => Promise<void>
 }
 
 const supabaseUrl = process.env.REACT_APP_SUPABASE_URL ?? ''
@@ -74,20 +75,36 @@ function AuthProvider({children}: {children: React.ReactNode}) {
 
   const signOut = React.useCallback(
     () =>
-      supabase.auth.signOut().then(({error}) => {
-        if (error) {
-          throw error
-        }
-
+      supabase.auth.signOut().finally(() => {
         queryClient.clear()
         setData(null)
       }),
     [queryClient, setData]
   )
 
+  const changePassword = React.useCallback(
+    (newPassword: string) =>
+      supabase.auth.update({password: newPassword}).then(({user, error}) => {
+        if (error) {
+          throw error
+        } else {
+          if (data?.user) {
+            setData({
+              ...data,
+              user: {
+                ...data.user,
+                ...user,
+              },
+            })
+          }
+        }
+      }),
+    [data, setData]
+  )
+
   const value = React.useMemo<AuthProviderValue>(() => {
-    return {session: data, signIn, signOut, signUp}
-  }, [signIn, signOut, signUp, data])
+    return {session: data, signIn, signOut, signUp, changePassword}
+  }, [changePassword, data, signIn, signOut, signUp])
 
   if (isLoading || isIdle) {
     return (

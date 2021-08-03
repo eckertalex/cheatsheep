@@ -1,4 +1,4 @@
-import {Box, Flex, useColorModeValue as mode, useMediaQuery} from '@chakra-ui/react'
+import {Box, Flex, useColorModeValue, useMediaQuery} from '@chakra-ui/react'
 import {ErrorBoundary} from 'react-error-boundary'
 import {Routes, Route} from 'react-router-dom'
 import {FullPageErrorFallback} from 'components/full-page-error-fallback/full-page-error-fallback'
@@ -19,11 +19,12 @@ function AppRoutes() {
 }
 
 function AuthenticatedApp() {
+  const backgroundColor = useColorModeValue('gray.50', 'gray.800')
   const [isLargerThan768] = useMediaQuery('(min-width: 768px)')
 
   return (
     <ErrorBoundary FallbackComponent={FullPageErrorFallback}>
-      <Flex flexDirection={isLargerThan768 ? 'row' : 'column'} backgroundColor={mode('gray.50', 'gray.800')}>
+      <Flex flexDirection={isLargerThan768 ? 'row' : 'column'} backgroundColor={backgroundColor}>
         {isLargerThan768 ? <Sidebar /> : <MobileNav />}
         <Box
           as="main"

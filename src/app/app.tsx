@@ -23,7 +23,7 @@ function App() {
           content="Cheatsheep App written in React with Chakra-UI, react-router, and react-query"
         />
       </Helmet>
-      {session ? <AuthenicatedApp /> : <UnauthenticatedApp />}
+      {Boolean(session?.access_token) ? <AuthenicatedApp /> : <UnauthenticatedApp />}
     </React.Suspense>
   )
 }
