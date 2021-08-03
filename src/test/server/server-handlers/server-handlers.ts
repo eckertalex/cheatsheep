@@ -1,4 +1,5 @@
 import {match} from 'node-match-path'
+import {authHandlers} from 'test/server/server-handlers/auth-handlers'
 
 let sleep = () => {}
 if (process.env.CI) {
@@ -20,7 +21,7 @@ function ls(key: string, defaultVal: number) {
   return val && Number.isFinite(val) ? val : defaultVal
 }
 
-const handlers = [].map((handler) => {
+const handlers = [...authHandlers].map((handler) => {
   // @ts-expect-error
   const originalResolver = handler.resolver
   // @ts-expect-error

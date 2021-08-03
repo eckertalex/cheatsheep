@@ -1,5 +1,5 @@
 import {setupWorker} from 'msw'
-import {handlers} from 'test/server/server-handlers'
+import {handlers} from 'test/server/server-handlers/server-handlers'
 
 const server = setupWorker(...handlers)
 

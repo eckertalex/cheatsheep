@@ -7,8 +7,6 @@
 
 if (process.env.NODE_ENV === 'development') {
   module.exports = require('test/server/dev-server')
-} else if (process.env.NODE_ENV === 'test') {
-  module.exports = require('test/server/test-server')
 } else {
   // in normal apps you'll not do anything in this case
   // but for this workshop app, we're actually going to
