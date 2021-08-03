@@ -91,7 +91,7 @@ function Sidebar() {
           <HStack justifyContent={isMiniMode ? 'center' : 'space-between'} w="full">
             {isMiniMode ? null : (
               <Text color={mode('gray.300', 'gray.600')} fontSize="sm">
-                {isMiniMode ? `v${appVersion}` : `App Version v${appVersion}`}
+                App Version v{appVersion}
               </Text>
             )}
             <Tooltip label={sidebarToggleLabel} hasArrow placement="right">

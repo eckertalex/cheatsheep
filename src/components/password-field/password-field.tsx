@@ -12,7 +12,12 @@ import {
 } from '@chakra-ui/react'
 import {Eye as EyeIcon, EyeOff as EyeOffIcon} from 'lucide-react'
 
-const PasswordField = React.forwardRef<HTMLInputElement, InputProps>((props, ref) => {
+type PasswordFieldProps = InputProps & {
+  label?: string
+}
+
+const PasswordField = React.forwardRef<HTMLInputElement, PasswordFieldProps>((props, ref) => {
+  const {label = 'Password', id, ...rest} = props
   const {isOpen, onToggle} = useDisclosure()
   const inputRef = React.useRef<HTMLInputElement>(null)
 
@@ -31,10 +36,10 @@ const PasswordField = React.forwardRef<HTMLInputElement, InputProps>((props, ref
   }
 
   return (
-    <FormControl id="password">
-      <FormLabel>Password</FormLabel>
+    <FormControl id={id}>
+      <FormLabel>{label}</FormLabel>
       <InputGroup>
-        <Input ref={mergeRef} type={isOpen ? 'text' : 'password'} autoComplete="current-password" required {...props} />
+        <Input ref={mergeRef} type={isOpen ? 'text' : 'password'} autoComplete="current-password" required {...rest} />
         <InputRightElement>
           <IconButton
             bg="transparent !important"
