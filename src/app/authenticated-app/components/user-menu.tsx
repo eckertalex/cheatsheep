@@ -1,20 +1,7 @@
 import React from 'react'
 import {Menu, MenuItem, MenuList, MenuDivider, MenuProps} from '@chakra-ui/react'
-import BoringAvatar from 'boring-avatars'
 import {Link} from 'react-router-dom'
 import {LogOut as LogOutIcon, User as UserIcon} from 'lucide-react'
-
-function UserAvatar({name = 'Cheatsheep'}: {name?: string}) {
-  return (
-    <BoringAvatar
-      size={32}
-      name={name}
-      variant="pixel"
-      square={false}
-      colors={['#ee5caa', '#f1e37a', '#2bd9fc', '#fc1e60']}
-    />
-  )
-}
 
 type UserMenuProps = {
   button: React.ReactNode
@@ -39,4 +26,4 @@ function UserMenu({button, signOut, placement = 'right'}: UserMenuProps) {
   )
 }
 
-export {UserMenu, UserAvatar}
+export {UserMenu}

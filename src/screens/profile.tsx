@@ -4,6 +4,7 @@ import {ColorModeSwitcher} from 'components/color-mode-switcher/color-mode-switc
 import {Page} from 'components/page/page'
 import {ChangePassword} from 'features/change-password/change-password'
 import {DeleteAccount} from 'features/delete-account/delete-account'
+import {UserInfo} from 'features/user-info/user-info'
 
 function ProfileScreen() {
   const {colorMode} = useColorMode()
@@ -11,7 +12,8 @@ function ProfileScreen() {
   return (
     <Page display="flex" flexDirection="column" alignItems="start">
       <Heading>Edit Profile</Heading>
-      <SimpleGrid columns={{base: 1, md: 2}} spacing={10} w="full">
+      <SimpleGrid columns={{base: 1, md: 2}} spacing={4} marginTop={2.5} w="full">
+        <UserInfo />
         <ChangePassword />
         <Card>
           <Heading>Color Preferences</Heading>

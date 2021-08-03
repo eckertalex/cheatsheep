@@ -15,9 +15,10 @@ import {Link} from 'react-router-dom'
 import {useAuth} from 'context/auth-provider'
 import {useLocalStorageValue} from '@react-hookz/web'
 import {SidebarClose as SidebarCloseIcon, SidebarOpen as SidebarOpenIcon} from 'lucide-react'
-import {UserMenu, UserAvatar} from 'app/authenticated-app/components/user-menu'
+import {UserMenu} from 'app/authenticated-app/components/user-menu'
 import {navItems, NavItem, MiniNavItem} from 'app/authenticated-app/components/nav'
 import {EweIcon} from 'app/ewe'
+import {UserAvatar} from 'features/user-info/user-info'
 
 const appVersion = process.env.REACT_APP_VERSION
 
