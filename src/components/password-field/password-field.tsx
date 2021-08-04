@@ -1,6 +1,7 @@
 import React from 'react'
 import {
   FormControl,
+  FormErrorMessage,
   FormLabel,
   IconButton,
   Input,
@@ -13,11 +14,12 @@ import {
 import {Eye as EyeIcon, EyeOff as EyeOffIcon} from 'lucide-react'
 
 type PasswordFieldProps = InputProps & {
+  error?: string
   label?: string
 }
 
 const PasswordField = React.forwardRef<HTMLInputElement, PasswordFieldProps>((props, ref) => {
-  const {label = 'Password', id, ...rest} = props
+  const {label = 'Password', id, error, isInvalid, ...rest} = props
   const {isOpen, onToggle} = useDisclosure()
   const inputRef = React.useRef<HTMLInputElement>(null)
 
@@ -36,10 +38,10 @@ const PasswordField = React.forwardRef<HTMLInputElement, PasswordFieldProps>((pr
   }
 
   return (
-    <FormControl id={id}>
+    <FormControl id={id} isInvalid={isInvalid} isRequired>
       <FormLabel>{label}</FormLabel>
       <InputGroup>
-        <Input ref={mergeRef} type={isOpen ? 'text' : 'password'} autoComplete="current-password" required {...rest} />
+        <Input ref={mergeRef} type={isOpen ? 'text' : 'password'} autoComplete="current-password" {...rest} />
         <InputRightElement>
           <IconButton
             bg="transparent !important"
@@ -50,6 +52,7 @@ const PasswordField = React.forwardRef<HTMLInputElement, PasswordFieldProps>((pr
           />
         </InputRightElement>
       </InputGroup>
+      <FormErrorMessage>{error}</FormErrorMessage>
     </FormControl>
   )
 })

@@ -1,5 +1,5 @@
-import React from 'react'
-import {FormControl, FormLabel, Input, Icon, VStack, Stack} from '@chakra-ui/react'
+import {useForm} from 'react-hook-form'
+import {FormControl, FormLabel, Input, Icon, VStack, Stack, FormErrorMessage} from '@chakra-ui/react'
 import {useAsync} from 'utils/hooks'
 import {useAuth} from 'context/auth-provider'
 import {PasswordField} from 'components/password-field/password-field'
@@ -7,45 +7,36 @@ import {LogIn as LogInIcon, XOctagon as XOctagonIcon, CheckCircle as CheckCircle
 import {LoadingButton} from 'components/loading-button/loading-button'
 import {ModalBody, ModalFooter} from 'components/modal/modal'
 
+type Form = {email: string; password: string}
+
 function SignInForm() {
   const {signIn} = useAuth()
+  const {
+    register,
+    handleSubmit,
+    formState: {errors, touchedFields},
+  } = useForm<Form>({mode: 'onTouched'})
   const {status, error, run} = useAsync()
-  const [email, setEmail] = React.useState('')
-  const [password, setPassword] = React.useState('')
   const state =
     status === 'pending' ? 'loading' : status === 'resolved' ? 'success' : status === 'rejected' ? 'error' : 'idle'
 
-  function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
-    event.preventDefault()
-
-    run(
-      signIn({
-        email,
-        password,
-      })
-    )
-  }
-
   return (
-    <form onSubmit={handleSubmit}>
+    <form onSubmit={handleSubmit((data) => run(signIn(data)))}>
       <Stack spacing="6">
         <ModalBody>
           <VStack spacing="2.5">
-            <FormControl id="email">
+            <FormControl id="email" isInvalid={errors.email && touchedFields.email} isRequired>
               <FormLabel>Email</FormLabel>
-              <Input
-                required
-                value={email}
-                onChange={(event) => {
-                  setEmail(event.target.value)
-                }}
-              />
+              <Input {...register('email', {required: true})} />
+              <FormErrorMessage>{errors.email?.message}</FormErrorMessage>
             </FormControl>
             <PasswordField
-              value={password}
-              onChange={(event) => {
-                setPassword(event.target.value)
-              }}
+              {...register('password', {
+                required: true,
+                minLength: {value: 6, message: 'Password should be at least 6 characters'},
+              })}
+              isInvalid={errors.password && touchedFields.password}
+              error={errors.password?.message}
             />
           </VStack>
         </ModalBody>
